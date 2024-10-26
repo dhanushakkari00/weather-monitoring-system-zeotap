@@ -1,0 +1,6 @@
+Django==5.1.2
+requests==2.31.0
+background-task==1.2.5
+urllib3==1.26.16
+Pillow==10.0.0
+django-widget-tweaks==1.4.12  
