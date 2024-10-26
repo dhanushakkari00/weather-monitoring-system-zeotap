@@ -66,6 +66,8 @@ Troubleshooting
 2. Database Issues: If you encounter database errors, try clearing the existing data and re-running the migrations.
 3. Icons Not Displaying: Ensure that the static files (CSS and icons) are correctly linked by running:
 python manage.py collectstatic
+
+
 Historical Data and Chart Display
 An effort was made to implement a feature that retrieves and displays historical weather data using APIs, along with visualizing the information in charts for enhanced user experience. However, due to the limitations imposed by API pricing models and request rate limits, it was decided to refrain from fully integrating this functionality at this time. Future enhancements could include revisiting this feature when more cost-effective API options are available or if budgetary constraints allow for higher usage tiers.
 
