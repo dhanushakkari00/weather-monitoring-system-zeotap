@@ -5,19 +5,19 @@ Features
 - Temperature Units: Users can select between Celsius, Fahrenheit, or Kelvin for temperature display.
 - Responsive Design: Works well on both desktop and mobile screens.
 - Dynamic Background: Changes the background based on the current weather condition.
-- 
+  
 Design Choices
 Frontend Design
 - Dynamic Weather Icons: Weather icons change according to the weather conditions (e.g., sun, clouds, rain).
 - Responsive Layout: Uses flexbox and grid systems for a fluid design that adjusts well to different screen sizes.
 - Elegant UI Components: Transparent panels with hover effects are used to create a modern and smooth user interface.
 - Background Image: The application uses dynamic background images to match the weather condition for a visually pleasing experience.
-- 
+  
 Backend Design
 - API Integration: The application uses the OpenWeatherMap API for fetching weather data, including current conditions and 5-hour forecasts.
 - Django Framework: The application is built on Django, leveraging Django's robust features for web development.
 - Scheduled Tasks: Background tasks are used for periodically fetching weather data and updating the database every 60 seconds.
-- 
+  
 Dependencies
 Before running the project, ensure that you have the following dependencies installed:
 
