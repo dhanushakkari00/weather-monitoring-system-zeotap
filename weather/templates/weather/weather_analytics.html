@@ -1,0 +1,201 @@
+{% extends 'weather/base.html' %}
+{% load static %}
+
+{% block title %}Weather Analytics{% endblock %}
+
+{% block content %}
+<!-- Navigation Bar -->
+<div class="nav-bar">
+    <a href="{% url 'home' %}" class="nav-button">Home</a>
+    <a href="{% url 'set_alert_preference' %}" class="nav-button">Set Alert</a>
+    <a href="{% url 'view_alerts' %}" class="nav-button">View Alerts</a>
+    <a href="{% url 'weather_analytics' %}" class="scroll-button">Weather Analytics</a>
+
+</div>
+
+<div class="analytics-container">
+    <h1>Weather Analytics for {{ selected_city }}</h1>
+
+    <!-- City selection dropdown -->
+    <form method="GET" class="city-selector">
+        <label for="city">Select City:</label>
+        <select id="city" name="city" onchange="this.form.submit()">
+            {% for city in cities %}
+            <option value="{{ city }}" {% if city == selected_city %}selected{% endif %}>{{ city }}</option>
+            {% endfor %}
+        </select>
+    </form>
+
+    {% if avg_temperature %}
+    <div class="analytics-results">
+        <!-- Average Temperature Panel -->
+        <div class="panel">
+            <div class="icon">
+                <i class="wi wi-thermometer"></i>
+            </div>
+            <div class="info">
+                <h2>Average Temperature</h2>
+                <p>{{ avg_temperature }}°C</p>
+            </div>
+        </div>
+
+        <!-- Maximum Temperature Panel -->
+        <div class="panel">
+            <div class="icon">
+                <i class="wi wi-hot"></i>
+            </div>
+            <div class="info">
+                <h2>Maximum Temperature</h2>
+                <p>{{ max_temperature }}°C</p>
+            </div>
+        </div>
+
+        <!-- Minimum Temperature Panel -->
+        <div class="panel">
+            <div class="icon">
+                <i class="wi wi-snowflake-cold"></i>
+            </div>
+            <div class="info">
+                <h2>Minimum Temperature</h2>
+                <p>{{ min_temperature }}°C</p>
+            </div>
+        </div>
+
+        <!-- Dominant Weather Condition Panel -->
+        <div class="panel">
+            <div class="icon">
+                <i class="wi wi-{{ dominant_weather | lower }}"></i>
+            </div>
+            <div class="info">
+                <h2>Dominant Weather Condition</h2>
+                <p>{{ dominant_weather }}</p>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <p>No data available for the selected city.</p>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<!-- Weather Icons CSS -->
+<link rel="stylesheet" href="{% static 'css/weather-icons.min.css' %}">
+
+<style>
+    /* Full page background */
+    body {
+        background-image: url("{% static 'images/sky_backgroung.jpg' %}"); /* Path to your sky image */
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        height: 100vh;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Navigation Bar */
+    .nav-bar {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .nav-button {
+        display: inline-block;
+        padding: 10px 20px;
+        margin: 0 10px;
+        background-color: rgba(255, 255, 255, 0.7);
+        border-radius: 20px;
+        color: #333;
+        font-size: 16px;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+    }
+
+    .nav-button:hover {
+        background-color: rgba(0, 0, 0, 0.5);
+        color: #fff;
+    }
+
+    /* Main container styling */
+    .analytics-container {
+        max-width: 900px;
+        margin: 50px auto;
+        background-color: rgba(255, 255, 255, 0.8); /* Light transparent background */
+        padding: 40px;
+        border-radius: 20px;
+        text-align: center;
+        color: #444;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Form styling for the city selector */
+    .city-selector {
+        margin-bottom: 30px;
+    }
+
+    select {
+        padding: 10px;
+        font-size: 1rem;
+        border-radius: 8px;
+        background-color: #f0f0f0;
+        border: 1px solid #ccc;
+        margin-top: 20px;
+        color: #333;
+    }
+
+    /* Panels for each weather metric */
+    .analytics-results {
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .panel {
+        background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent background */
+        border-radius: 15px;
+        padding: 20px;
+        width: 200px;
+        margin: 20px;
+        text-align: center;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .panel:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    }
+
+    .panel h2 {
+        font-size: 18px;
+        margin-bottom: 10px;
+        color: #555;
+    }
+
+    .panel p {
+        font-size: 22px;
+        color: #333;
+        font-weight: bold;
+    }
+
+    /* Weather icons inside panels */
+    .icon i {
+        font-size: 50px;
+        color: #333;
+    }
+
+    /* Responsive design for smaller screens */
+    @media (max-width: 768px) {
+        .analytics-results {
+            flex-direction: column;
+        }
+
+        .panel {
+            width: 100%;
+            margin: 10px 0;
+        }
+    }
+</style>
+{% endblock %}

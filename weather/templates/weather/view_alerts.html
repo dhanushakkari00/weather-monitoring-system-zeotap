@@ -1,0 +1,149 @@
+{% extends 'weather/base.html' %}
+{% load static %}
+
+{% block title %}Your Weather Alerts{% endblock %}
+
+{% block content %}
+<!-- Navigation Buttons -->
+<div class="scroll-container">
+    <a href="{% url 'home' %}" class="scroll-button">Home</a>
+    <a href="{% url 'set_alert_preference' %}" class="scroll-button">Set Alert</a>
+    <a href="{% url 'view_alerts' %}" class="scroll-button active">View Alerts</a>
+    <a href="{% url 'weather_analytics' %}" class="scroll-button">Weather Analytics</a>
+
+</div>
+
+<div class="alerts-container">
+    <h1>Your Weather Alerts</h1>
+
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>City</th>
+                <th>Email</th>
+                <th>Condition</th>
+                <th>Threshold</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for alert in alerts %}
+            <tr>
+                <td>{{ alert.city }}</td>
+                <td>{{ alert.email }}</td>
+                <td>{{ alert.weather_condition }}</td>
+                <td>{{ alert.temperature_threshold }}°C</td>
+                <td><a href="{% url 'delete_alert' alert.id %}" class="btn btn-danger">Delete</a></td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="text-center">No alerts set.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    body {
+        background-image: url("{% static 'images/clear_sky.jpg' %}"); /* Background image */
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        font-family: 'Roboto', sans-serif;
+        color: #fff;
+    }
+
+    /* Navigation Buttons Styling */
+    .scroll-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .scroll-button {
+        background-color: rgba(255, 255, 255, 0.2);
+        padding: 10px 20px;
+        border-radius: 30px;
+        margin: 0 10px;
+        font-size: 1.2rem;
+        color: black;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+    }
+
+    .scroll-button:hover {
+        background-color: rgba(255, 255, 255, 0.4);
+    }
+
+    .scroll-button.active {
+        background-color: rgba(0, 0, 0, 0.4);
+        color: #fff;
+    }
+
+    .alerts-container {
+        max-width: 900px;
+        margin: 100px auto;
+        padding: 40px;
+        background-color: rgba(255, 255, 255, 0.3);
+        border-radius: 20px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(10px);
+        color: #333;
+    }
+
+    h1 {
+        text-align: center;
+        font-size: 2.5rem;
+        margin-bottom: 30px;
+        color: #222;
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    }
+
+    .table {
+        width: 100%;
+        margin-bottom: 20px;
+        background-color: rgba(255, 255, 255, 0.9);
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    thead {
+        background-color: rgba(0, 123, 255, 0.9);
+        color: #fff;
+    }
+
+    th, td {
+        padding: 15px;
+        text-align: center;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    td {
+        color: #222;
+    }
+
+    .btn-danger {
+        background-color: #ff4d4d;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-danger:hover {
+        background-color: #ff1a1a;
+        text-decoration: none;
+        color: #fff;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+</style>
+{% endblock %}

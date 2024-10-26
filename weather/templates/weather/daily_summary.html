@@ -1,0 +1,150 @@
+{% extends 'weather/base.html' %}
+{% load static %}
+
+{% block title %}Daily Weather Summary{% endblock %}
+
+{% block content %}
+<div class="weather-summary-container">
+    <h1>Daily Weather Summary</h1>
+
+    <!-- City Selection Dropdown -->
+    <form method="GET" action="{% url 'daily_summary' %}">
+        <label for="city">Select City:</label>
+        <select name="city" id="city" onchange="this.form.submit()">
+            <option value="Delhi" {% if selected_city == "Delhi" %}selected{% endif %}>Delhi</option>
+            <option value="Mumbai" {% if selected_city == "Mumbai" %}selected{% endif %}>Mumbai</option>
+            <option value="Chennai" {% if selected_city == "Chennai" %}selected{% endif %}>Chennai</option>
+            <option value="Kolkata" {% if selected_city == "Kolkata" %}selected{% endif %}>Kolkata</option>
+        </select>
+    </form>
+
+    <!-- Weather Summary Table -->
+    <table>
+        <thead>
+            <tr>
+                <th>City</th>
+                <th>Date</th>
+                <th>Average Temperature (°C)</th>
+                <th>Max Temperature (°C)</th>
+                <th>Min Temperature (°C)</th>
+                <th>Average Humidity (%)</th>
+                <th>Average Wind Speed (m/s)</th>
+                <th>Dominant Weather Condition</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for summary in summaries %}
+            <tr>
+                <td>{{ summary.city }}</td>
+                <td>{{ summary.date }}</td>
+                <td>{{ summary.avg_temperature }}</td>
+                <td>{{ summary.max_temperature }}</td>
+                <td>{{ summary.min_temperature }}</td>
+                <td>{{ summary.avg_humidity }}</td>
+                <td>{{ summary.avg_wind_speed }}</td>
+                <td>{{ summary.dominant_weather_condition }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Adding Chart for Temperature -->
+    <canvas id="temperatureChart" width="400" height="200"></canvas>
+</div>
+
+<style>
+    .weather-summary-container {
+        max-width: 1200px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        color: #fff;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    th, td {
+        padding: 15px;
+        text-align: left;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    th {
+        background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    tr:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Style for Chart Container */
+    canvas {
+        margin-top: 40px;
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Using Chart.js CDN -->
+
+<script>
+    // Get chart context
+    var ctx = document.getElementById('temperatureChart').getContext('2d');
+
+    // Create the chart
+    var temperatureChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: [
+                {% for summary in summaries %}
+                "{{ summary.date }}",
+                {% endfor %}
+            ], // Dates as labels
+            datasets: [{
+                label: 'Average Temperature (°C)',
+                data: [
+                    {% for summary in summaries %}
+                    {{ summary.avg_temperature }},
+                    {% endfor %}
+                ],
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }, {
+                label: 'Max Temperature (°C)',
+                data: [
+                    {% for summary in summaries %}
+                    {{ summary.max_temperature }},
+                    {% endfor %}
+                ],
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1
+            }, {
+                label: 'Min Temperature (°C)',
+                data: [
+                    {% for summary in summaries %}
+                    {{ summary.min_temperature }},
+                    {% endfor %}
+                ],
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}

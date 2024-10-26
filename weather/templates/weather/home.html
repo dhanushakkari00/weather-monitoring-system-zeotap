@@ -1,0 +1,345 @@
+{% extends 'weather/base.html' %}
+{% load static %}
+
+{% block title %}Weather Dashboard{% endblock %}
+
+{% block extra_css %}
+<!-- Custom CSS for elegant UI -->
+<style>
+    body {
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        transition: background 0.5s ease-in-out;
+        font-family: 'Roboto', sans-serif;
+        color: #fff;
+    }
+
+    {% if current_weather.weather_condition == "clear sky" %}
+        body { background-image: url('{% static "images/clear_sky.jpg" %}'); }
+    {% elif current_weather.weather_condition == "rain" %}
+        body { background-image: url('{% static "images/rain.jpg" %}'); }
+    {% elif current_weather.weather_condition == "mist" %}
+        body { background-image: url('{% static "images/mist.jpg" %}'); }
+    {% else %}
+        body { background-image: url('{% static "images/default.jpg" %}'); }
+    {% endif %}
+
+    /* Main container styling */
+    .weather-container {
+        max-width: 1200px;
+        margin: 50px auto;
+        padding: 30px;
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+        backdrop-filter: blur(10px);
+    }
+
+    /* Elegant city name */
+    .city-name {
+        font-size: 4rem;
+        font-weight: bold;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+    /* Current weather block */
+    .current-weather {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        margin-bottom: 40px;
+        font-size: 1.2rem;
+    }
+
+    .temperature {
+        font-size: 5rem;
+        color: #ffffff; /* Changed to white */
+    }
+
+    /* Weather details for new panel */
+    .current-weather-panel {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        background-color: rgba(255, 255, 255, 0.2);
+        padding: 20px;
+        border-radius: 15px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .weather-icon {
+        font-size: 6rem;
+        margin-left: 15px;
+        color: #ffffff;  /* Icon color set to white */
+    }
+
+    .weather-details {
+        margin: 15px 0;
+        text-align: center;
+        font-size: 1.3rem;
+    }
+
+    /* Icons for weather details */
+    .details-icon {
+        font-size: 2rem;
+        margin-right: 5px;
+        vertical-align: middle;
+    }
+
+    /* Horizontal scrollbar for pages */
+    .horizontal-scrollbar {
+        overflow-x: auto;
+        white-space: nowrap;
+        padding: 10px 0;
+        margin-bottom: 30px;
+    }
+
+    .scroll-link {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+        margin-right: 15px;
+        color: #fff;
+        font-weight: bold;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+    }
+
+    .scroll-link:hover {
+        background-color: rgba(255, 255, 255, 0.4);
+    }
+
+    /* Transparent panel styling */
+    .transparent-panel {
+        background-color: rgba(255, 255, 255, 0.2);
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    /* 2x2 Panel grid for details */
+    .weather-details-panel {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .weather-panel-item {
+        background-color: rgba(255, 255, 255, 0.2);
+        padding: 15px;
+        border-radius: 10px;
+        text-align: center;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .forecast-container {
+        margin-top: 50px;
+        background-color: rgba(255, 255, 255, 0.05);
+        padding: 20px;
+        border-radius: 15px;
+        backdrop-filter: blur(10px);
+    }
+
+    .forecast-title {
+        font-size: 2rem;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .forecast-items {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+    }
+
+    .forecast-item {
+        text-align: center;
+        background-color: rgba(255, 255, 255, 0.1);
+        padding: 15px;
+        border-radius: 10px;
+        width: 150px;
+        margin: 0 10px;
+        transition: transform 0.3s ease;
+    }
+
+    .forecast-item:hover {
+        transform: translateY(-10px);
+    }
+
+    .forecast-icon {
+        font-size: 2.5rem;
+    }
+
+    .forecast-temperature {
+        font-size: 1.3rem;
+        margin-top: 10px;
+    }
+
+    .forecast-details {
+        margin-top: 5px;
+        font-size: 0.9rem;
+    }
+
+    /* Dropdown styling for temperature and city selection */
+    .city-dropdown {
+        position: absolute;
+        top: 20px;
+        right: 40px;
+    }
+    .dropdown-container {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+    }
+
+    /* Styling for dropdowns with transparent panel effect */
+    .dropdown-panel {
+        background-color: rgba(255, 255, 255, 0.2); /* Transparent background */
+        color: black;
+        padding: 10px;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        font-size: 1rem;
+        outline: none;
+        appearance: none; /* Remove default dropdown arrow for custom styling */
+        width: 150px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+    }
+
+    /* Adjust the hover effect */
+    .dropdown-panel:hover {
+        background-color: rgba(255, 255, 255, 0.4);
+    }
+    select {
+        background-color: rgba(255, 255, 255, 0.9);
+        color: #000; /* Font color changed to black */
+        padding: 10px 20px;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 10px;
+        font-size: 1.1rem;
+        margin-left: 10px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="scroll-container">
+    <!-- Updated buttons with links to respective pages -->
+    <a href="{% url 'home' %}" class="scroll-button active">Home</a>
+    <a href="{% url 'set_alert_preference' %}" class="scroll-button">Set Alert</a>
+    <a href="{% url 'view_alerts' %}" class="scroll-button">View Alerts</a>
+    <a href="{% url 'weather_analytics' %}" class="scroll-button">Weather Analytics</a>
+</div>
+
+<div class="weather-container">
+    <!-- Horizontal Scrollbar for Navigation -->
+
+    <!-- City Name -->
+    <div class="city-name">{{ selected_city }}</div>
+
+    <!-- Current Weather Condition Panel -->
+    <div class="current-weather-panel" style="display: flex; justify-content: center; align-items: center; padding: 20px 0;">
+        <!-- Temperature Section -->
+        <div class="temperature" style="flex: 1; text-align: right; padding-right: 20px;">
+            <i class="wi wi-thermometer details-icon"></i>
+            <span style="font-size: 4rem; font-weight: bold;">{{ current_weather.temperature }}°{{ temperature_unit|slice:":1" }}</span>
+        </div>
+        <!-- Weather Condition Section -->
+        <div class="weather-condition" style="flex: 1; text-align: left; padding-left: 20px; display: flex; align-items: center;">
+            <div class="weather-icon" style="font-size: 5rem; margin-right: 10px;">
+                {% if "clear sky" in current_weather.weather_condition %}
+                <i class="wi wi-day-sunny"></i>
+                {% elif "rain" in current_weather.weather_condition %}
+                <i class="wi wi-rain"></i>
+                {% elif "clouds" in current_weather.weather_condition %}
+                <i class="wi wi-cloudy"></i>
+                {% elif "snow" in current_weather.weather_condition %}
+                <i class="wi wi-snow"></i>
+                {% else %}
+                <i class="wi wi-cloud"></i> <!-- Default icon -->
+                {% endif %}
+            </div>
+            <div class="weather-condition-text" style="font-size: 3rem; font-weight: bold;">
+                {{ current_weather.weather_condition|title }}
+            </div>
+        </div>
+    </div>
+
+    <!-- 2x2 Transparent Panels for Humidity, Wind Speed, Precipitation, Feels Like -->
+    <div class="weather-details-panel">
+        <div class="weather-panel-item">
+            <i class="wi wi-humidity details-icon"></i> Humidity: {{ current_weather.humidity }}%
+        </div>
+        <div class="weather-panel-item">
+            <i class="wi wi-strong-wind details-icon"></i> Wind Speed: {{ current_weather.wind_speed }} m/s
+        </div>
+        <div class="weather-panel-item">
+            <i class="wi wi-raindrop details-icon"></i> Precipitation: {{ current_weather.precipitation }}%
+        </div>
+        <div class="weather-panel-item">
+            <i class="wi wi-thermometer details-icon"></i> Feels Like: {{ current_weather.feels_like }}°{{ temperature_unit }}
+        </div>
+    </div>
+
+    <!-- Forecast Section -->
+    <div class="forecast-container">
+        <div class="forecast-title">Weather Forecast (Next 5 Hours)</div>
+        <div class="forecast-items">
+            {% for weather in forecast %}
+            <div class="forecast-item">
+                <div class="forecast-icon">
+                    {% if "clear sky" in weather.weather_condition %}
+                    <i class="wi wi-day-sunny"></i>
+                    {% elif "rain" in weather.weather_condition %}
+                    <i class="wi wi-rain"></i>
+                    {% elif "clouds" in weather.weather_condition %}
+                    <i class="wi wi-cloudy"></i>
+                    {% elif "snow" in weather.weather_condition %}
+                    <i class="wi wi-snow"></i>
+                    {% else %}
+                    <i class="wi wi-cloud"></i>
+                    {% endif %}
+                </div>
+                <div class="forecast-temperature">{{ weather.temperature }}°{{ temperature_unit }}</div>
+                <div class="forecast-details">
+                    <p>Time: {{ weather.timestamp|date:"H:i" }}</p>
+                    <p>Condition: {{ weather.weather_condition|title }}</p>
+                    <p>Precipitation: {{ weather.precipitation }}%</p>
+                    <p>Feels Like: {{ weather.feels_like }}°{{ temperature_unit }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+   <!-- Dropdown for Temperature Unit and City -->
+   <div class="dropdown-container">
+    <!-- Dropdown for temperature units -->
+    <select id="temperature-unit" name="unit" onchange="window.location.href='?unit='+this.value+'&city='+document.getElementById('city-select').value;" class="dropdown-panel">
+        <option value="Celsius" {% if temperature_unit == 'Celsius' %}selected{% endif %}>Celsius</option>
+        <option value="Fahrenheit" {% if temperature_unit == 'Fahrenheit' %}selected{% endif %}>Fahrenheit</option>
+        <option value="Kelvin" {% if temperature_unit == 'Kelvin' %}selected{% endif %}>Kelvin</option>
+    </select>
+
+    <!-- Dropdown for city selection -->
+    <select id="city-select" name="city" onchange="window.location.href='?city='+this.value+'&unit='+document.getElementById('temperature-unit').value;" class="dropdown-panel">
+        {% for city in cities %}
+        <option value="{{ city }}" {% if city == selected_city %}selected{% endif %}>{{ city }}</option>
+        {% endfor %}
+    </select>
+</div>
+
+</div>
+{% endblock %}

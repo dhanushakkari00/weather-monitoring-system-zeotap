@@ -1,0 +1,186 @@
+{% extends 'weather/base.html' %}
+{% load static %}
+
+{% block title %}Set Your Weather Alerts{% endblock %}
+
+{% block content %}
+<!-- Navigation Bar -->
+<div class="scroll-container">
+    <a href="{% url 'home' %}" class="scroll-button">Home</a>
+    <a href="{% url 'set_alert_preference' %}" class="scroll-button active">Set Alert</a>
+    <a href="{% url 'view_alerts' %}" class="scroll-button">View Alerts</a>
+    <a href="{% url 'weather_analytics' %}" class="scroll-button">Weather Analytics</a>
+
+</div>
+
+<div class="set-alerts-container">
+    <h1>Set Your Weather Alerts</h1>
+
+    <!-- Success Message Display -->
+    {% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-success" role="alert">
+            <i class="wi wi-day-sunny"></i> {{ message }}
+        </div>
+    {% endfor %}
+    {% endif %}
+
+    <form method="POST" action="{% url 'set_alert_preference' %}">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="city">City <span style="color: red;">*</span></label>
+            <select id="city" name="city" class="form-control" required>
+                <option value="" disabled selected>Select City</option> <!-- Placeholder option -->
+                {% for city in cities %}
+                <option value="{{ city }}">{{ city }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email Address <span style="color: red;">*</span></label>
+            <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email" required>
+        </div>
+
+        <!-- Weather Condition (e.g. Temperature, Humidity, etc.) -->
+        <div class="form-group">
+            <label for="weather_condition">Set Alert For <span style="color: red;">*</span></label>
+            <select id="weather_condition" name="weather_condition" class="form-control" required>
+                <option value="Temperature">Temperature</option>
+                <option value="Humidity">Humidity</option>
+                <option value="Wind Speed">Wind Speed</option>
+                <option value="Precipitation">Precipitation</option>
+                <!-- Add more conditions if needed -->
+            </select>
+        </div>
+
+        <!-- Threshold Value -->
+        <div class="form-group">
+            <label for="temperature_threshold">Set Threshold Value <span style="color: red;">*</span></label>
+            <input type="number" id="temperature_threshold" name="temperature_threshold" class="form-control" placeholder="Enter threshold value" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary set-alert-btn">Set Alert</button>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    body {
+        background-image: url("{% static 'images/clear_sky.jpg' %}");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        transition: background 0.5s ease-in-out;
+        font-family: 'Roboto', sans-serif;
+        color: #fff;
+    }
+
+    /* Navigation buttons */
+    .scroll-container {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px;
+    }
+
+    .scroll-button {
+        background-color: rgba(255, 255, 255, 0.3);
+        border: none;
+        padding: 10px 20px;
+        margin: 0 10px;
+        font-size: 1rem;
+        color: #000;
+        border-radius: 25px;
+        transition: background-color 0.3s ease;
+        text-decoration: none;
+    }
+
+    .scroll-button.active {
+        background-color: rgba(0, 0, 0, 0.3);
+        color: white;
+    }
+
+    .scroll-button:hover {
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    /* Container styling */
+    .set-alerts-container {
+        max-width: 600px;
+        margin: 100px auto;
+        padding: 40px;
+        background-color: rgba(255, 255, 255, 0.3);
+        border-radius: 20px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(10px);
+        color: #333;
+    }
+
+    h1 {
+        text-align: center;
+        font-size: 2.5rem;
+        margin-bottom: 30px;
+        color: #222;
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Success alert styling */
+    .alert-success {
+        margin-bottom: 20px;
+        padding: 15px;
+        background-color: rgba(75, 192, 192, 0.2);
+        color: #007bff;
+        text-align: center;
+        font-size: 1.3rem;
+        border-radius: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .alert-success i {
+        margin-right: 10px;
+        color: #28a745;
+        font-size: 2rem;
+    }
+
+    /* Form styling */
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    label {
+        font-size: 1.2rem;
+        margin-bottom: 8px;
+        display: block;
+        color: #222;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 12px;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        background-color: rgba(255, 255, 255, 0.8);
+        color: #000;
+    }
+
+    .set-alert-btn {
+        width: 100%;
+        padding: 15px;
+        border: none;
+        border-radius: 10px;
+        background-color: #007bff;
+        color: #fff;
+        font-size: 1.2rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .set-alert-btn:hover {
+        background-color: #0056b3;
+    }
+</style>
+{% endblock %}

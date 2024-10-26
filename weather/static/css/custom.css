@@ -1,0 +1,151 @@
+/* weather/static/css/custom.css */
+body {
+    font-family: 'Arial', sans-serif;
+    color: #333;
+}
+
+.city-name {
+    font-size: 3rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+.temperature {
+    font-size: 4rem;
+    color: #2196f3;
+    text-align: center;
+}
+
+.current-weather {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.forecast {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.forecast-item {
+    display: inline-block;
+    width: 100px;
+    text-align: center;
+}
+
+select {
+    margin: 20px auto;
+    display: block;
+}
+/* Smooth Scrollbar for navigation */
+.horizontal-scrollbar {
+    overflow-x: auto;
+    white-space: nowrap;
+    padding: 10px;
+    scroll-behavior: smooth;
+    background-color: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(5px);
+    border-radius: 10px;
+}
+
+.horizontal-scrollbar a {
+    display: inline-block;
+    color: black;
+    font-weight: 600;
+    padding: 15px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+.horizontal-scrollbar a:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+/* Adjust transparent panel to display without scrollbar */
+.transparent-panel {
+    display: flex;
+    justify-content: space-around;  /* Organizes the options neatly across */
+    align-items: center;
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+    backdrop-filter: blur(10px);
+    margin-top: 30px;
+}
+
+/* Individual panel buttons */
+.transparent-panel a {
+    padding: 10px 20px;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #000;
+    border-radius: 30px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    margin-right: 15px;
+}
+
+.transparent-panel a:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+    color: white;
+}
+/* Hover effect for current weather panel */
+.current-weather-panel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.current-weather-panel:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+/* Hover effect for 2x2 details panels */
+.weather-panel-item {
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.weather-panel-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+.scroll-container {
+    display: flex;
+    justify-content: center;  /* This centers the buttons horizontally */
+    align-items: center;  /* This ensures vertical centering if needed */
+    margin: 20px auto;  /* Margin to ensure spacing around the container */
+}
+
+.scroll-button {
+    padding: 10px 20px;
+    margin: 0 10px;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #000;
+    border-radius: 30px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.scroll-button.active {
+    background-color: #4caf50;  /* Style for active button */
+    color: white;
+}
+
+.scroll-button:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+    color: white;
+}

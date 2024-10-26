@@ -1,0 +1,25 @@
+<canvas id="tempChart" width="400" height="200"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+var ctx = document.getElementById('tempChart').getContext('2d');
+var tempChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: [{% for summary in summaries %}"{{ summary.date }}",{% endfor %}],  // Dates for X-axis
+        datasets: [{
+            label: 'Average Temperature',
+            data: [{% for summary in summaries %}{{ summary.avg_temperature }},{% endfor %}],  // Avg temps for Y-axis
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: false
+            }
+        }
+    }
+});
+</script>

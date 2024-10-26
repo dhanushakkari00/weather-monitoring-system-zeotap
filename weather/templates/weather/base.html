@@ -1,0 +1,36 @@
+<!-- weather/templates/weather/base.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Weather Dashboard{% endblock %}</title>
+    {% load static %}
+
+    <!-- Weather Icons and CSS -->
+    <link rel="stylesheet" href="{% static 'css/weather-icons.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+    <nav>
+        <ul>
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'set_alert_preference' %}">Set Alerts</a></li> <!-- Updated this URL -->
+            <li><a href="{% url 'view_alerts' %}">View Alerts</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>Weather Dashboard &copy; 2024</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,62 @@
+/* General body styling */
+body {
+    font-family: 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-size: cover;
+    background-position: center;
+    transition: background 0.5s ease-in-out;
+}
+
+/* City name styling */
+.city-name {
+    font-size: 4rem;
+    font-weight: bold;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+/* Current temperature display */
+.temperature {
+    font-size: 5rem;
+    font-weight: 700;
+    color: #007bff;
+}
+
+/* Weather details and description */
+.weather-description {
+    font-size: 2rem;
+    font-weight: 400;
+    color: #555;
+}
+
+.details {
+    font-size: 1.2rem;
+    color: #333;
+}
+
+/* Forecast items */
+.forecast-item {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 1.5rem;
+    color: #333;
+}
+
+.forecast-item i {
+    font-size: 2.5rem;
+    color: #007bff;
+}
+
+/* City selection dropdown styling */
+#city-select {
+    font-size: 1.2rem;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: white;
+    border: 2px solid #007bff;
+    color: #333;
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
+}
